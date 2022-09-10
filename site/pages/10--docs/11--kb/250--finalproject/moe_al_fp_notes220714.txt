@@ -1,0 +1,379 @@
+Moe Al
+  4:15 PM
+Hi Pete, I have attached some of my notes throughout the Bootcamp with some links that I used to help with my project.
+MeNote
+------------------------- Data and time in Java 8
+    LocateDate same as below
+    LocateTime
+    ---- OR
+    LocalDateTime jan  = LocalDateTime.now()
+
+    ----------- to format the date used on the instance of the var
+        jan.format(DateTimeFormat)
+
+    --------------- compare dates/ addition ..,etc
+    jan1.isBefore(jan2)         // Many methods here
+
+            ---------- immutable so need to be re-asigned to itself to modify
+------------ parsing date time
+    use local date time to to pasrse a date a string fornmat and then pass DataeFormatter
+    jan = LocalDateTime.parse("2022 ... time .. PM", DateTimeFormatter.ofPatter)
+    need to handle exception.
+
+
+
+    ------ get the last day of the month
+        LocalDate var = LocalDate.of(2022, month, day).with(TemporalAdjusters.lastDayOfMonth());
+
+------------------------------------------------ multithread
+    to use the rest of the core cpu processor
+
+    implement Runnable and it method run()
+
+
+    ------------------------------ ExecutorService
+        create thread of pools and use the not instead of new
+        ExecutorService serivce = Executor.FixedThreadPool(maxNumberHere) some options
+
+
+    ----------------------- future How to return a value?
+
+    a place holder for a value that will be populated in the future
+
+
+
+
+    ----------------------------------------- JSON
+    GET >>>>  is fetching the data from the server
+        use >> {id goes here} to get the data
+            inside the method >> @PathVariable
+    POST >>> sending the data from HTML to the server
+
+
+    when sending request there is header and body
+        in get request there is only header no body
+            so you have to send it through the url
+        in post request there is header and body
+            so you want to send things in body not url
+
+
+
+    in Uri anything after the >> ? is a query, typically for the database
+
+    add @requestPara to param in the controller class
+
+
+    --------- for database create a package call Repository
+        @Repository
+        on top of the class add
+
+        typical methods you would find in database are
+
+        save (Obj obj){
+        dataBase.put(obj.getId(), obj)
+
+        Obj findById(Long objId){
+        return dataBase.get(objId);
+
+    --- mapping Json to POJO
+
+    @JsonProperty("name of the oject")
+    private Name Of object as an instance var
+        data from the api end point injected to the POJO
+
+
+    ----- RestTemplate rt =
+    allows to make restful call/ fetching data
+
+    rt.exchange
+    rt.getRequest
+    rt.postRequest
+
+    ------------------------------------------- Rest and/ Controller
+    1. should only routing things around around
+    2. should interact with services
+    3. should it will return data from the Repository
+
+
+            ------------ note
+            in a list you need entrySet() to be able to stream() a list
+
+    if the class is just @Controller >>>>>>>>>>>> need UI
+        then the method can be string
+            @GetMapping("")
+            public String foo(this just a map func with key and val ModelMap model)
+
+            // behind the seen this will look for
+                /src/main/resources/templates/something.html something== name of the return
+
+            // need to use put in order to added to the param ex.
+            String valFirst = "Moe"
+                model.put("keyisFirst", valFirst)
+                return "something";
+    else if used RestController
+        method has to return obj
+        public ResponseEntity<SomeObj> foo
+
+        ----------- redirect from postMapping into to getMapping
+        # disable caching so no need for restart the server when making change in the html file
+            put this inside the application.properites >> spring.thymeleaf.cache = false
+            in the postMapping method the return should be "redirect/" <<< / point to the root
+
+        ------- in the html file in src/main/resources/template
+            to call controller method
+
+            inside the tag <html add xmlns:th="http://thymeleaf.org">
+
+                inside any tag you can call the controller methods like this
+                1. inline
+                    <div th:inlline"text> type anything [[${valFirst}]] </div>
+                2.
+                    <div th:text="|type anything ${valFirst}|" > this will be override </div>
+
+
+
+            ---------- packages naming data transfer object dto vs domain
+                dto for mapping data into an java object / transfer data from one api to another
+
+                domains for permanent persistence data stored in database
+
+                repository should be an interface that implement JDP
+
+                services do all the accessing to the data in the repository
+
+                web for controller which contains get and post method
+
+
+
+
+        ---------------------- inside html
+
+        <form action="" method="post">
+        if action is empty it mean submit to the current url aka itself
+
+
+        ---------------- with url
+            use @{allow to create dynamic url}
+            ${.something} <<< this is spring notation
+
+            ******************************* understand path variables
+                th:action="@{/persons/{personId}/delete(personId=${person.id}, add more here )}"
+
+                this for click able data to redirect to
+                <a th:href="@{/persons/{personId}(personId=${sortedPerson.id})}">
+
+
+
+        ---------------------------------- @ annotation scope and
+
+            @component(" optional see Qualifier") >> by defualt singleton
+            this for class
+
+            @Autowired <<< search by type
+            @Qualifier("name of class") <<< for change name of class to search by name
+            private ClassName className
+
+
+            ---------------- this for Entity class
+
+            // used to assign id with auto increment
+            @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+            public getId()
+
+
+            @Column
+
+            // used to change length of string default
+
+            ------------------------------------------------------------------ mapping object into database
+
+            >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> a relation can be bi-directional or un-directional
+                                                bi; is more complex specially for one-to-many
+
+            by default all fetching is lazy which will get data that is not needed << slower
+                you can make it eager << which enhance performance
+
+            one-to-many(fetch = FetchType.LAZY/EGGER)
+
+            in the parent class >> create a list of the child class >> add this on top of getter or attribute
+
+                @OneToMany(mappedBy = "name of the parent in the child class")
+
+            in the child class >> create an instance of the parent >> add on top of the getter or attribute
+
+                @ManyToOne
+
+            many-to-many
+
+            in the parent class >> create a list of child >> add
+                @ManyToMany
+                @JoinTable(name = "user_account",
+                    joinColumns = @JoinColumn(name = "parent id "),
+                    inverseJoinColumns = @JoinColumn(name = "child id"))
+
+            in the child class >> create list of the parent >> add
+                @ManyToMany(mappedBy = "name of child in the parent")
+
+
+            one-to-one
+
+            in the parent class >> create just one child >> add
+
+                @OneToOne(mappedBy = "name of the parent in the child class")
+
+            in the child class >> create one instance of the
+                parent(remember this is the name you will add above) >> add
+
+                @OneToOne
+                @MapsId << this to make it a forgien key
+                @JoinColumn(name = "user_id") <<< to change name of the col
+
+    ------------------------------------------------------ hibernate
+
+        ---- domain
+            pojo << the java obj that will be mapped into a database
+
+            use at the top of the class name
+                @Entity
+                // if you want to change the name of the table in mysql use annotation table with name
+                @Table(name = "users")
+
+        --------- application properties
+            can add the database connection
+
+            // see here
+// https://www.tutorialspoint.com/spring_boot/spring_boot_database_handling.htm#:~:text=To%20access%20the%20Relational%20Database,Datasource%20for%20the%20JdbcTemplate%20object.
+
+            spring.datasource.driverClassName= com.mysql.jdbc.Driver
+            // spring.datasource.url = jdbc:mysql://localhost:3306/PRODUCTSERVICE?autoreconnect = true
+            spring.datasource.url = jdbc:mysql://localhost:3306/LOCAL_PROF = true
+            spring.datasource.username = root
+            spring.datasource.password = ALml%98213
+
+            spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5Dialect
+            spring.jpa.hibernate.ddl-auto = update
+            pring.jpa.show-sql = true
+
+
+            ------------ what is Dialect
+
+                is a class and a bridge between Java JDBC types and SQL types, which contains mapping between java language data type and database datatype.
+
+
+    -------------------------------------------------------- repository
+    create an interface >>> of the class you want to map in the database
+        and >>>>  extends JpaRepository<class , type of the id>
+            with interface we always extends
+
+
+    --- example of non custom queries
+
+        // ---------- all the following name of the methods must match the attributes in the user obj
+        // findBy should always be the pre fix
+            // followed by the instance variable
+    // select * from users where username = :username
+
+    List<User> findByUsername(String username);
+
+    ---- custom queries
+
+                spring data jpa
+
+                 @Query("select alis from ClassName alis where username= :username")
+                    for alis use the first letter of the class you querying from
+                        where is a sql syntax
+
+
+
+    ------------------- doing lazy eager
+
+    https://thorben-janssen.com/entity-mappings-introduction-jpa-fetchtypes/
+        The default depends on the cardinality of the relationship. All to-one relationships use FetchType.EAGER
+            and all to-many relationships FetchType.LAZY.
+
+
+
+    ---------- cascade type >> cascade = {CascadeType.MERGE,/ CascadeType.PERSIST,/ CascadeType.REMOVE}
+
+
+
+    --------------------------------------------------------------- javascript
+
+    when sending request there is header and body
+        in get request there is only header no body
+            so you have to send it through the url
+        in post request there is header and body
+            so you want to send things in body not url
+
+
+    ------------ steps to get data from front end to the back end in the body response << it's post request
+
+    add event listener to var
+        get the each data point/box/text from the fort end by:
+        var someName = document.querySelector("#id of that data")
+
+        create an obj1 with key name of each data and value using the name from above e.g., someName
+
+        use fetch with an obj inside << this obj contains {
+            method:"POST",
+            headers: {
+            "Content-Type": "application/json"},
+
+            body: JSON.stringify(obj1)
+
+        })
+        // this is same as get
+        .then((response) => response.json())
+    .then((data) => {
+        console.log(data)
+    })
+    m
+
+    --------------------------------------------------------------- restController vs controller
+    rest return object while controller return a view << web page
+
+    ---- RestController >>>>>>>>>> no need to deal with UI
+
+                Controller >>>>>>>>>>>> need for UI
+
+    if you have a class with mix of RestController and controller
+        then annotate the class with >> @Controller
+        for method that should be rest add annotation >> @ResponseBody
+
+
+
+
+    ---- to grab an id from a tag use >> #idName
+
+    -------------------------------------------------------------------- security
+
+    spring
+        https://www.marcobehler.com/guides/spring-security
+
+    privileges
+        https://www.baeldung.com/role-and-privilege-for-spring-security-registration
+
+
+    circular dependency
+        https://www.baeldung.com/circular-dependencies-in-spring
+
+
+    ------------------
+
+        implement the same spring boot rest api from here
+            https://github.com/BrandontheDev360?tab=repositories
+
+    --------------- working solution for login
+        also see testRegister for more
+        https://www.codejava.net/frameworks/spring-boot/user-registration-and-login-tutorial
+
+    ------
+    for validation
+    https://medium.com/@gustavo.ponce.ch/spring-boot-spring-mvc-spring-security-mysql-a5d8545d837d
+https://github.com/gustavoponce7/spring-login/tree/master/src/main/java/com/gpch/login
+https://github.com/gustavoponce7/spring-login/blob/master/src/main/java/com/gpch/login/controller/LoginController.java
+https://www.javadevjournal.com/spring-security/registration-with-spring-security/
+https://www.javadevjournal.com/spring-security/spring-security-login/
+https://www.codebyamir.com/blog/user-account-registration-with-spring-boot
+https://hellokoding.com/registration-and-login-example-with-spring-security-spring-boot-spring-data-jpa-hsql-jsp/
+https://www.javaguides.net/2018/10/user-registration-module-using-springboot-springmvc-springsecurity-hibernate5-thymeleaf-mysql.html
