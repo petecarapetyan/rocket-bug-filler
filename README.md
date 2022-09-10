@@ -40,4 +40,10 @@ If only it was always - because sometimes they are - and even more maddeningly i
 
 ## Things which are rarely but sometimes broken
 
-Sometimes the top level nav bar does not include the primary links, either. Such as docs, themes in the rocket page. But this is very unreliable and difficult for me to replicate.
+Sometimes the top level nav bar does not include the primary links, either. Such as `docs, themes, blog` in the rocket documentation . But this is very unreliable and difficult for me to replicate. Of course.
+
+## Video documentation
+
+Although it is poorly done and probably like watching paint dry, you are welcome to sample the video where some of the above is demonstrated
+
+https://www.youtube.com/watch?v=ZESt132f0yI
