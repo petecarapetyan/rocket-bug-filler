@@ -1,6 +1,8 @@
 # Filler Data Plus Cleanup For Between Multiple Tries
 
-The short version - you don't need anything but test data to prove this bug.
+The short version - you don't need anything but test pages to prove this bug.
+
+EXCEPT YOU DO NEED MORE THAN TEST PAGES!!! Because the results are so horrendously inconsistent, you cannot count on a single test giving you an accurate picture! 
 
 So provided are:
 
@@ -9,9 +11,9 @@ So provided are:
 
 Thats it. Copy any combination of these folders into `51-docs-theme-launch/site/pages` where they go and then `npm run build && npm run preview`
 
-You don't need my help with the above. It works or it doesn't. Case closed. Except ....
+You don't need my help with the above. It works or it doesn't. Case closed. Except for that conistency issue.
 
-## What if you want to test repeatedly?
+## What if you have to test repeatedly?
 
 Here's what I ran into: _**Wildly inconsistent results**_ 
 
@@ -47,3 +49,5 @@ Sometimes the top level nav bar does not include the primary links, either. Such
 Although it is poorly done and probably like watching paint dry, you are welcome to sample the video where some of the above is demonstrated
 
 https://www.youtube.com/watch?v=ZESt132f0yI
+
+If nothing else the video does very clearly show what some typical breakage patterns can be found - at least on my box.
